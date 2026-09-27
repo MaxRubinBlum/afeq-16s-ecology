@@ -4,7 +4,7 @@ Two independent full-length 16S taxonomies are retained.
 
 ## GTDB — primary taxonomy
 
-GTDB is the primary taxonomy because the project's MAGs are classified with GTDB and direct 16S-versus-MAG comparisons require a common taxonomy.
+GTDB is the primary taxonomy because it provides a consistent bacterial/archaeal nomenclature and keeps the 16S dataset ready for later genome-resolved integration once the MAG analysis is complete.
 
 Validated reference:
 
@@ -28,19 +28,30 @@ SILVA is retained as an independent 16S classification and for conventional taxo
 
 It is also used to identify obvious non-prokaryotic organelle amplicons.
 
-## Organelle filtering
+## Organelle and non-target filtering
 
-Before prokaryotic ecological analyses, flag and remove OTUs whose SILVA taxonomy contains:
+Before bacterial-dominated ecological analyses, flag and remove:
 
 - `Chloroplast`
 - `Mitochondria`
+- SILVA `d__Eukaryota`
+- OTUs lacking a GTDB domain assignment to Bacteria or Archaea
 
 In the validated 26,300-OTU dataset:
 
 - 112 OTUs were labelled chloroplast
 - 111 OTUs were labelled mitochondria
 
-Together chloroplast and mitochondrial reads represented approximately 1.18% of the unfiltered table. The final prokaryotic working filter also removes low-abundance SILVA Eukaryota and GTDB-unassigned-domain OTUs.
+Together chloroplast and mitochondrial reads represented approximately 1.18% of the unfiltered table. The final working filter also removes low-abundance SILVA Eukaryota and GTDB-unassigned-domain OTUs.
+
+## Primer-coverage note
+
+The forward primer `AGRGTTYGATYMTGGCTCAG` is 27F-like and the dataset is strongly bacterial-biased. Archaeal relative abundance in this amplicon dataset must therefore **not** be interpreted as an estimate of total archaeal abundance in the sediment.
+
+For the current integrated ecology:
+
+- 16S = bacterial-dominated sediment-community structure
+- mcrA = targeted methane-cycling archaeal community
 
 ## Master annotation table
 
@@ -63,4 +74,4 @@ Generate this table with `scripts/06_build_master_annotation.py`.
 
 GTDB and SILVA confidence values are classification confidence, not sequence identity.
 
-Do not compare ASV/OTU counts directly with MAG species counts. For 16S-MAG comparisons, aggregate both datasets to common GTDB ranks such as genus, family or order.
+MAG integration is a future analysis layer. Once MAGs are finalized, compare 16S and MAGs at common GTDB ranks such as genus, family, or order rather than equating 99% 16S OTUs with genome species.
