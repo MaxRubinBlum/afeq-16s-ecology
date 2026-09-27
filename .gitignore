@@ -1,28 +1,41 @@
+# Local config
+config/config.sh
+
 # Raw sequencing
 *.fastq
 *.fastq.gz
 *.fq
 *.fq.gz
 
-# QIIME 2 artifacts / visualizations
+# QIIME artifacts / visualizations
 *.qza
 *.qzv
 
-# Large sequence/table artifacts
-*.biom
-*.bam
-*.sam
-*.paf
-*.uc
+# Large sequence/reference outputs
 *.fasta
 *.fa
 *.fna
+*.uc
+*.sam
+*.bam
+*.paf
 
-# Generated analysis outputs
-results/*
-!results/README.md
+# Large tables and workbooks: commit summaries/templates deliberately
+*.xlsx
+*.xls
+*.biom
+
+# Analysis workspaces
+analysis/
+data/
+raw/
+reference_db/
 work/
 logs/
+
+# Generated ecology outputs
+ecology/
+results/ecology/
 
 # Python
 __pycache__/
@@ -31,4 +44,7 @@ __pycache__/
 
 # OS/editor
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
 *~
