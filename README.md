@@ -55,9 +55,18 @@ See `docs/06_analysis_decisions_qc.md` for the reasoning behind the final workfl
 
 ## Taxonomy policy
 
-- **GTDB R226**: primary taxonomy because MAGs are classified with GTDB and downstream 16S-MAG comparisons require a common nomenclature.
+- **GTDB R226**: primary taxonomy for stable bacterial/archaeal nomenclature and to keep the 16S dataset ready for later genome-resolved integration.
 - **SILVA**: secondary independent taxonomy, conventional 16S nomenclature, and organelle identification.
-- Chloroplast and mitochondrial OTUs should be removed before prokaryotic ecological analyses.
+- Chloroplast, mitochondrial, SILVA-Eukaryota, and GTDB-unassigned-domain OTUs are removed before bacterial-dominated ecological analyses.
+
+## Current integration
+
+The present integrated ecology uses:
+
+- full-length 16S: bacterial-dominated sediment-community structure
+- mcrA: targeted methane-cycling archaeal community
+
+MAGs are still being generated/analyzed and are not part of the current interpretation.
 
 ## Repository layout
 
