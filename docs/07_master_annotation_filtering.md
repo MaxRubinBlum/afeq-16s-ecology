@@ -19,7 +19,7 @@ The three files must contain exactly the same 26,300 OTU IDs.
 Run:
 
 ~~~bash
-python3 scripts/06_build_master_annotation.py   --table "$OTU_TABLE"   --gtdb "$GTDB_TAXONOMY"   --silva "$SILVA_TAXONOMY"   --outdir "$ECOLOGY_OUT/prepared"
+python3 scripts/08_build_master_annotation.py   --table "$OTU_TABLE"   --gtdb "$GTDB_TAXONOMY"   --silva "$SILVA_TAXONOMY"   --outdir "$ECOLOGY_OUT/prepared"
 ~~~
 
 The script records the original GTDB/SILVA assignments and confidence values, then adds filtering flags.
