@@ -36,7 +36,7 @@ Eleven Jan biological names were sequenced again in run 3408 and carry the suffi
 Use:
 
 ~~~bash
-python3 scripts/08_compare_jan_resequencing.py   --table "$FILTERED_OTU_TABLE"   --annotation "$MASTER_TAXONOMY"   --out "$ECOLOGY_OUT/qc/jan_resequencing.tsv"
+python3 scripts/10_compare_jan_resequencing.py   --table "$FILTERED_OTU_TABLE"   --annotation "$MASTER_TAXONOMY"   --out "$ECOLOGY_OUT/qc/jan_resequencing.tsv"
 ~~~
 
 The script normalizes each library to relative abundance before calculating Bray-Curtis similarity, so library-size differences do not dominate the comparison.
