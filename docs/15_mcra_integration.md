@@ -25,7 +25,7 @@ The first integrated analysis contained 96 exact shared samples.
 Script:
 
 ~~~text
-scripts/12_mcra_16s_coupling.py
+scripts/19_mcra_community_coupling.py
 ~~~
 
 The script calculates Bray-Curtis distances independently for 16S and mcrA and tests whether pairwise community differences covary.
@@ -37,7 +37,7 @@ This is the primary cross-marker test because it does not require direct taxonom
 Script:
 
 ~~~text
-scripts/14_mcra_taxa_coupling.py
+scripts/20_mcra_taxa_coupling.py
 ~~~
 
 The analysis:
