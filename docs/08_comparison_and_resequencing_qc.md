@@ -29,6 +29,24 @@ By contrast, the direct Cutadapt + VSEARCH workflow retained:
 
 Therefore the direct 99% workflow is primary and DADA2 is a sensitivity comparison.
 
+## Reproduce the processing comparison
+
+If both final 99% tables are available, use:
+
+~~~bash
+python3 scripts/12_compare_processing_branches.py   --direct-table /path/to/direct/otu-table-99.tsv   --dada2-table /path/to/dada2-derived/otu-table-99.tsv   --outdir /path/to/qc/processing_comparison
+~~~
+
+This comparison reports:
+
+- number of features;
+- number of samples;
+- total reads;
+- median/min/max sample depth;
+- per-sample direct versus DADA2 read retention.
+
+It is a processing-QC comparison, not a claim that one feature definition is biologically identical to the other.
+
 ## Jan run-3408 libraries
 
 Eleven Jan biological names were sequenced again in run 3408 and carry the suffix -r3408.
