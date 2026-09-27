@@ -2,76 +2,59 @@
 
 Two independent full-length 16S taxonomies are retained.
 
-## GTDB — primary taxonomy
+## GTDB - primary ecological taxonomy
 
-GTDB is the primary taxonomy because it provides a consistent bacterial/archaeal nomenclature and keeps the 16S dataset ready for later genome-resolved integration once the MAG analysis is complete.
+GTDB R226 is the primary taxonomy used in ecological summaries.
 
-Validated reference:
+Reasons:
 
-- GTDB release 226.0
-- SSU species representatives
-- Bacteria + Archaea
-- full-length Naive Bayes classifier
-- QIIME 2 / q2-feature-classifier
+- consistent modern bacterial/archaeal naming;
+- useful family/genus hierarchy for environmental analysis;
+- compatible with later genome-resolved work.
 
-The local QIIME 2 Amplicon 2026.1 RESCRIPt plugin supports GTDB through R226.
+The project uses the GTDB R226 SpeciesReps full-length SSU reference set for Bacteria + Archaea.
 
-Classifier parameters used for queries:
+## SILVA - secondary taxonomy
 
-- confidence: 0.7
-- read orientation: auto
-- full-length query OTU representatives
+SILVA is retained as an independent 16S classification and for conventional nomenclature.
 
-## SILVA — secondary taxonomy
+It is especially useful for explicit identification of:
 
-SILVA is retained as an independent 16S classification and for conventional taxonomic nomenclature.
+- chloroplast;
+- mitochondria;
+- Eukaryota/non-target sequences.
 
-It is also used to identify obvious non-prokaryotic organelle amplicons.
+## Why keep both?
 
-## Organelle and non-target filtering
+No reference taxonomy is perfect.
 
-Before bacterial-dominated ecological analyses, flag and remove:
+Do not choose whichever assignment looks more familiar. Preserve both and keep the project rule stable:
 
-- `Chloroplast`
-- `Mitochondria`
-- SILVA `d__Eukaryota`
-- OTUs lacking a GTDB domain assignment to Bacteria or Archaea
+~~~text
+GTDB  = primary ecological nomenclature
+SILVA = independent cross-check + organelle/non-target screen
+~~~
 
-In the validated 26,300-OTU dataset:
+## Classifier confidence
 
-- 112 OTUs were labelled chloroplast
-- 111 OTUs were labelled mitochondria
+The QIIME classification output contains a confidence score.
 
-Together chloroplast and mitochondrial reads represented approximately 1.18% of the unfiltered table. The final working filter also removes low-abundance SILVA Eukaryota and GTDB-unassigned-domain OTUs.
+This is **classifier confidence**, not percent sequence identity and not proof of species-level correctness.
 
-## Primer-coverage note
+## Taxonomic resolution
 
-The forward primer `AGRGTTYGATYMTGGCTCAG` is 27F-like and the dataset is strongly bacterial-biased. Archaeal relative abundance in this amplicon dataset must therefore **not** be interpreted as an estimate of total archaeal abundance in the sediment.
+Family-level analysis is often the most stable ecological level in this dataset.
 
-For the current integrated ecology:
+Genus-level analyses are useful but should be interpreted with awareness that many OTUs do not resolve equally well.
 
-- 16S = bacterial-dominated sediment-community structure
-- mcrA = targeted methane-cycling archaeal community
+Species labels should be treated much more cautiously.
 
-## Master annotation table
+## Primer-coverage caveat
 
-The final annotation table should contain at minimum:
+The forward primer is 27F-like and underrepresents Archaea.
 
-```text
-OTU_ID
-GTDB_taxonomy
-GTDB_confidence
-SILVA_taxonomy
-SILVA_confidence
-is_chloroplast
-is_mitochondria
-exclude_from_prokaryotic_ecology
-```
+Therefore, low archaeal relative abundance in the 16S table must not be interpreted as evidence that Archaea are rare in the sediment.
 
-Generate this table with `scripts/06_build_master_annotation.py`.
+For methane-cycling archaea, use the mcrA marker as the targeted dataset.
 
-## Interpretation policy
-
-GTDB and SILVA confidence values are classification confidence, not sequence identity.
-
-MAG integration is a future analysis layer. Once MAGs are finalized, compare 16S and MAGs at common GTDB ranks such as genus, family, or order rather than equating 99% 16S OTUs with genome species.
+See docs/06_reference_classifiers.md for the classifier construction and policy, and docs/07_master_annotation_filtering.md for the final filtering rules.
