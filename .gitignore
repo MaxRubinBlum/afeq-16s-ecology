@@ -1,0 +1,34 @@
+# Raw sequencing
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+
+# QIIME 2 artifacts / visualizations
+*.qza
+*.qzv
+
+# Large sequence/table artifacts
+*.biom
+*.bam
+*.sam
+*.paf
+*.uc
+*.fasta
+*.fa
+*.fna
+
+# Generated analysis outputs
+results/*
+!results/README.md
+work/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS/editor
+.DS_Store
+*~
