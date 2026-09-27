@@ -40,7 +40,7 @@ In the validated 26,300-OTU dataset:
 - 112 OTUs were labelled chloroplast
 - 111 OTUs were labelled mitochondria
 
-Together these represented approximately 1.18% of reads.
+Together chloroplast and mitochondrial reads represented approximately 1.18% of the unfiltered table. The final prokaryotic working filter also removes low-abundance SILVA Eukaryota and GTDB-unassigned-domain OTUs.
 
 ## Master annotation table
 
@@ -54,7 +54,7 @@ SILVA_taxonomy
 SILVA_confidence
 is_chloroplast
 is_mitochondria
-is_organelle
+exclude_from_prokaryotic_ecology
 ```
 
 Generate this table with `scripts/06_build_master_annotation.py`.
