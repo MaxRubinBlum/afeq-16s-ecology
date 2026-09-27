@@ -80,7 +80,25 @@ bash scripts/07_classify_silva.sh
 python3 tests/validate_final_outputs.py   --table "$OTU_TABLE"   --gtdb "$GTDB_TAXONOMY"   --silva "$SILVA_TAXONOMY"
 ~~~
 
-## 9. Run the ecology layer
+## 9. Build master annotation and taxonomy QC
+
+The complete ecology runner does this automatically, but it can be inspected manually:
+
+~~~bash
+python3 scripts/08_build_master_annotation.py   --table "$OTU_TABLE"   --gtdb "$GTDB_TAXONOMY"   --silva "$SILVA_TAXONOMY"   --outdir "$ECOLOGY_OUT/prepared"
+
+python3 scripts/11_taxonomy_qc.py   --annotation "$ECOLOGY_OUT/prepared/master_taxonomy.tsv"   --out "$ECOLOGY_OUT/qc/taxonomy_qc.tsv"
+~~~
+
+## 10. Optional direct-versus-DADA2 processing summary
+
+If a DADA2-derived 99% TSV has been exported:
+
+~~~bash
+python3 scripts/12_compare_processing_branches.py   --direct-table "$OTU_TABLE"   --dada2-table /path/to/dada2_otu_table.tsv   --outdir "$ECOLOGY_OUT/qc/processing_comparison"
+~~~
+
+## 11. Run the ecology layer
 
 Switch to the ecology environment if desired:
 
@@ -90,11 +108,20 @@ source config/config.sh
 bash scripts/run_ecology_pipeline.sh config/config.sh
 ~~~
 
-The runner creates the filtered taxonomy/table, harmonized metadata, QC, composition profiles, alpha diversity, beta diversity, and environment-association outputs.
+The runner executes steps 13-20:
 
-If mcrA paths are configured, it also runs the cross-marker analyses.
+~~~text
+13 prepare ecology tables
+14 taxonomic composition
+15 depth-resolved composition
+16 Shannon alpha diversity
+17 Bray-Curtis / PCoA / PERMANOVA / PERMDISP
+18 site-stratified geochemistry associations
+19 16S-mcrA community coupling (optional)
+20 16S taxon-mcrA lineage coupling (optional)
+~~~
 
-## 10. Record provenance
+## 12. Record provenance
 
 For every analysis used in a report/manuscript, record:
 
