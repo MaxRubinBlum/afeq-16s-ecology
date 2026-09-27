@@ -1,97 +1,143 @@
 # Afeq full-length 16S ecology
 
-Reproducible processing and analysis workflow for PacBio Kinnex full-length 16S rRNA gene data from the Afeq sediment time series.
+Reproducible workflow for the Afeq wetland **full-length 16S rRNA gene** project.
 
-This repository documents the **methods, QC decisions, executable pipelines, and analysis code**. It intentionally does not contain raw FASTQ files, large QIIME 2 artifacts, or biological interpretation.
+This repository documents the analysis from PacBio Kinnex CCS FASTQ files to a final direct 99% OTU table, dual GTDB/SILVA taxonomy, bacterial-dominated ecological analyses, and integration with the mcrA dataset. It is written for a student who is comfortable with basic biology but may be new to command-line bioinformatics and ecological statistics.
 
-## Current primary workflow
+> **Important:** raw FASTQ files, unpublished sample metadata, QIIME artifacts, classifiers/reference databases, large feature tables, and generated ecological results are intentionally not stored in GitHub. The repository contains the workflow, small QC summaries, templates, reproducible scripts, and explanations of the analytical decisions.
 
-The primary ecological feature table is generated with a direct 99% OTU workflow:
+## What this workflow does
 
-```text
-PacBio Kinnex CCS FASTQ
-        |
-        v
-Cutadapt: orient reads + trim full-length 16S primers
-        |
-        v
-VSEARCH: maxEE and length filtering
-        |
-        v
-pooled exact dereplication
-        |
-        v
-VSEARCH abundance-sorted clustering at 99%
-        |
-        v
-abundance-aware de novo chimera screening
-        |
-        v
-map all filtered reads back to accepted centroids
-        |
-        v
-sample x 99% OTU count table
-        |
-        +--> GTDB R226 full-length Naive Bayes taxonomy
-        |
-        +--> SILVA full-length Naive Bayes taxonomy
-```
+1. Inventory two PacBio sequencing runs and construct canonical sample IDs.
+2. Exclude copied duplicate FASTQs from the second raw-data directory.
+3. Orient full-length reads and trim the biological 16S primers with Cutadapt.
+4. Filter PacBio reads by expected error and full-length size with VSEARCH.
+5. Pool and exactly dereplicate filtered reads.
+6. Cluster full-length sequences at 99% identity.
+7. Perform abundance-aware de novo chimera screening.
+8. Map all filtered reads back to the accepted 99% centroids.
+9. Preserve a QIIME 2 DADA2 CCS branch as a stringent sensitivity comparison.
+10. Classify final 99% OTUs with GTDB R226 and SILVA.
+11. Build one master annotation and remove organelle/non-target features.
+12. Harmonize and validate sample metadata.
+13. Generate GTDB phylum/family/genus composition tables.
+14. Calculate repeated-rarefaction richness and Shannon diversity.
+15. Calculate Bray-Curtis dissimilarity, PCoA, PERMANOVA/PERMDISP, and depth structure.
+16. Generate site-stratified bacterial taxon/geochemistry associations.
+17. Compare bacterial-dominated 16S community turnover with the targeted mcrA community.
+18. Generate depth/site/month-adjusted 16S taxon-mcrA lineage association tables.
 
-The earlier QIIME 2 DADA2 CCS workflow is retained as a stringent comparison branch.
+## Start here
 
-## Validated dataset checkpoints
+If you are new to bioinformatics, read these in order:
 
-- sequencing run 2860: 62 libraries
-- sequencing run 3408: 126 libraries
-- total libraries: 188
-- six copied run-2860 Jan EA4 FASTQs in the second directory were byte-identical duplicates and were excluded from run 3408 input
-- raw reads: 25,395,564
-- direct primer + quality/length-filtered reads: 20,117,175 (79.22%)
-- final direct non-chimeric 99% OTUs: 26,300
-- final direct OTU table: 12,355,927 mapped reads
-- GTDB and SILVA outputs each match the 26,300 OTU identifiers one-to-one
+1. [Student guide](docs/00_student_guide.md)
+2. [Project and data structure](docs/01_project_and_data.md)
+3. [Environment setup](docs/02_environment_setup.md)
+4. [Sample naming and metadata](docs/03_sample_naming_metadata.md)
+5. [Primary full-length 99% OTU processing](docs/04_primary_sequence_processing.md)
+6. [Taxonomy strategy](docs/05_taxonomy.md)
+7. [GTDB and SILVA reference classifiers](docs/06_reference_classifiers.md)
+8. [Master annotation and ecological filtering](docs/07_master_annotation_filtering.md)
+9. [DADA2 comparison and Jan resequencing QC](docs/08_comparison_and_resequencing_qc.md)
+10. [Ecology-ready analysis](docs/09_ecology.md)
+11. [Troubleshooting](docs/10_troubleshooting.md)
+12. [Analysis decisions and current QC](docs/11_analysis_decisions_qc.md)
+13. [Copy-paste run recipe](docs/12_run_recipe.md)
+14. [GitHub workflow](docs/13_github_workflow.md)
+15. [Ecological analysis pipeline](docs/14_ecology_analysis_pipeline.md)
+16. [16S-mcrA integration](docs/15_mcra_integration.md)
 
-See `docs/06_analysis_decisions_qc.md` for the reasoning behind the final workflow.
+## Ecology analysis layer
 
-## Taxonomy policy
+After the final OTU table and taxonomy exports exist, run:
 
-- **GTDB R226**: primary taxonomy for stable bacterial/archaeal nomenclature and to keep the 16S dataset ready for later genome-resolved integration.
-- **SILVA**: secondary independent taxonomy, conventional 16S nomenclature, and organelle identification.
-- Chloroplast, mitochondrial, SILVA-Eukaryota, and GTDB-unassigned-domain OTUs are removed before bacterial-dominated ecological analyses.
+~~~bash
+bash scripts/run_ecology_pipeline.sh config/config.sh
+~~~
 
-## Current integration
+The ecology layer is documented in [docs/14_ecology_analysis_pipeline.md](docs/14_ecology_analysis_pipeline.md).
 
-The present integrated ecology uses:
+The repository documents methods, reasoning, inputs, outputs, and reproducible commands. Biological interpretation belongs in reports/manuscripts rather than hidden inside pipeline code.
 
-- full-length 16S: bacterial-dominated sediment-community structure
-- mcrA: targeted methane-cycling archaeal community
+## Main software
 
-MAGs are still being generated/analyzed and are not part of the current interpretation.
+The completed workflow used:
+
+- QIIME 2 amplicon 2026.1
+- RESCRIPt
+- Cutadapt
+- VSEARCH
+- SeqKit
+- Python 3
+- pandas
+- NumPy
+- SciPy
+- statsmodels
+- Matplotlib
+- openpyxl
+
+The QIIME environment used on the workstation was named:
+
+~~~text
+qiime2-amplicon-2026.1
+~~~
+
+## Primers
+
+Biological full-length 16S primers:
+
+~~~text
+forward        AGRGTTYGATYMTGGCTCAG
+reverse        RGYTACCTTGTTACGACTT
+3' terminal    AAGTCGTAACAAGGTARCY
+~~~
+
+The Cutadapt primary workflow uses the forward primer and the forward-oriented reverse-terminal sequence with --revcomp so CCS reads in either orientation are standardized.
+
+The forward primer is 27F-like and strongly bacterial-biased. Do not interpret the low archaeal fraction in this 16S dataset as the true archaeal fraction in sediment.
 
 ## Repository layout
 
-```text
-config/       example paths and parameters
-docs/         student-facing workflow and decision log
-scripts/      executable pipeline and analysis scripts
-metadata/     metadata templates / small curated metadata files only
-results/      README and small non-interpretive QC summaries only
-tests/        lightweight checks
-```
+~~~text
+afeq-16s-ecology/
+├── README.md
+├── CONTRIBUTING.md
+├── PROJECT_STATUS.md
+├── config/
+│   └── config.example.sh
+├── docs/
+├── metadata/
+│   └── metadata_template.tsv
+├── results/
+│   ├── qc_summary.tsv
+│   └── README.md
+├── scripts/
+├── tests/
+└── .gitignore
+~~~
 
-## Large files
+## Reproducibility principle
 
-Do **not** commit FASTQ, QZA, QZV, BIOM, large FASTA, or full generated count tables. These remain on the analysis workstation.
+Do not edit analysis outputs manually. If a filtering rule, taxonomic decision, prevalence threshold, rarefaction depth, or statistical design changes, change the script/configuration and regenerate the outputs.
 
-## Software
+## Data policy
 
-Core tools used in the validated workflow:
+This project is unpublished. Keep the GitHub repository **private** unless the PI explicitly decides to make the analysis public.
 
-- Cutadapt
-- VSEARCH 2.27.1
-- QIIME 2 Amplicon 2026.1
-- q2-feature-classifier / scikit-learn
-- RESCRIPt
-- Python 3
+Do not commit:
 
-Exact commands and parameters are recorded in `docs/` and `scripts/`.
+- raw FASTQ files;
+- full unpublished metadata workbooks;
+- sample-level feature tables;
+- QIIME .qza/.qzv files;
+- GTDB/SILVA classifiers or databases;
+- large FASTA/intermediate files;
+- generated ecological tables or figures unless deliberately selected for release.
+
+The supplied .gitignore prevents most accidental additions.
+
+## Project management
+
+- [Current project status](PROJECT_STATUS.md)
+- [Contributing/version-control habits](CONTRIBUTING.md)
