@@ -53,7 +53,7 @@ DADA2 ASVs are retained for provenance and sensitivity analysis, but raw ASV ric
 
 - GTDB R226 = primary taxonomy
 - SILVA = secondary taxonomy and organelle flagging
-- chloroplast and mitochondrial OTUs are removed before prokaryotic ecology
+- chloroplast, mitochondrial, SILVA-Eukaryota and GTDB-unassigned-domain OTUs are removed before prokaryotic ecology
 
 ## 10. Validated primary-dataset checkpoints
 
