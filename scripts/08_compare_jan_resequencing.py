@@ -17,7 +17,16 @@ RANK_PREFIX = {
 }
 
 
+def normalize(v):
+    total = np.sum(v)
+    return v / total if total > 0 else v
+
+
 def bray_similarity(a, b):
+    # Technical/resequencing comparison is performed on relative abundance
+    # so differences in library size do not dominate Bray-Curtis.
+    a = normalize(a.astype(float))
+    b = normalize(b.astype(float))
     den = np.sum(a + b)
     if den == 0:
         return np.nan
@@ -34,15 +43,6 @@ def extract_rank(taxon, rank):
             value = token[len(prefix):].strip()
             return value if value else "Unassigned"
     return "Unassigned"
-
-
-def aggregate_by_rank(counts, ann, rank):
-    labels = ann.set_index("OTU_ID")["GTDB_taxonomy"].map(
-        lambda x: extract_rank(x, rank)
-    )
-    tmp = counts.copy()
-    tmp["rank"] = tmp["OTU_ID"].map(labels)
-    return tmp.drop(columns="OTU_ID").groupby(tmp["rank"]).sum()
 
 
 def main():
@@ -76,9 +76,10 @@ def main():
     if args.annotation:
         ann = pd.read_csv(args.annotation, sep="\t")
         ranks = [x.strip() for x in args.ranks.split(",") if x.strip()]
+        labels = ann.set_index("OTU_ID")["GTDB_taxonomy"]
+
         for rank in ranks:
             grouped = table[["OTU_ID"] + sample_cols].copy()
-            labels = ann.set_index("OTU_ID")["GTDB_taxonomy"]
             grouped["rank"] = grouped["OTU_ID"].map(labels).map(
                 lambda x: extract_rank(x, rank)
             )
@@ -90,6 +91,7 @@ def main():
         for original, resequenced in pairs:
             a = mat[original].to_numpy(dtype=float)
             b = mat[resequenced].to_numpy(dtype=float)
+
             rows.append(
                 {
                     "level": level,
