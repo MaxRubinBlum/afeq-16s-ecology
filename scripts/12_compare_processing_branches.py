@@ -8,11 +8,18 @@ import pandas as pd
 
 
 def read_table(path):
-    df = pd.read_csv(path, sep="\t", comment=None)
-    if df.columns[0].startswith("#"):
-        df = df.rename(columns={df.columns[0]: "feature_id"})
-    else:
-        df = df.rename(columns={df.columns[0]: "feature_id"})
+    # VSEARCH tables begin directly with "#OTU ID". BIOM TSV exports often
+    # contain one preceding "# Constructed from biom file" comment line.
+    with open(path, "r", encoding="utf-8") as handle:
+        first = handle.readline()
+
+    skiprows = 1 if first.startswith("# Constructed") else 0
+    df = pd.read_csv(path, sep="\t", skiprows=skiprows)
+    df = df.rename(columns={df.columns[0]: "feature_id"})
+
+    if df["feature_id"].duplicated().any():
+        raise ValueError(f"{path}: duplicate feature IDs")
+
     return df
 
 
