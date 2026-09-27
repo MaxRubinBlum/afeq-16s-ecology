@@ -23,7 +23,7 @@ python3 scripts/06_build_master_annotation.py \
 This generates:
 
 - a combined master taxonomy
-- an organelle-filtered OTU count table
+- a filtered bacterial-dominated OTU count table
 - QC summary
 
 ## Sequencing/resequencing QC
@@ -34,7 +34,7 @@ The output reports Bray-Curtis similarity at OTU level and, when taxonomy is sup
 
 ## Taxonomic composition
 
-Use `scripts/09_taxonomic_profiles.py` to aggregate the organelle-filtered table at a GTDB or SILVA taxonomic rank and calculate relative abundances.
+Use `scripts/09_taxonomic_profiles.py` to aggregate the filtered table at a GTDB or SILVA taxonomic rank and calculate relative abundances.
 
 ## Alpha diversity
 
@@ -48,13 +48,22 @@ Use `scripts/11_bray_pcoa.py` for Bray-Curtis dissimilarity and PCoA coordinates
 
 PERMANOVA and environmental models should be run only after metadata factors and repeated/technical samples are explicitly defined.
 
-## 16S-MAG comparisons
+## Current cross-marker integration
 
-Do not compare counts of 16S OTUs with counts of MAG species.
+The current integrated analysis combines:
 
-Instead:
+- bacterial-dominated 16S community structure
+- mcrA methane-cycling archaeal community structure
 
-1. classify/retain MAG taxonomy in GTDB
+Use `scripts/12_mcra_16s_coupling.py`, `scripts/13_taxa_environment_associations.py`, and `scripts/14_mcra_taxa_coupling.py`.
+
+## Future MAG integration
+
+MAGs are still in progress and are not used in the current ecological interpretation.
+
+Once the MAG dataset is finalized:
+
+1. retain MAG taxonomy in GTDB
 2. aggregate 16S counts to GTDB genus/family/order
 3. convert MAG presence/abundance to the same rank
 4. compare shared and unique lineages at the common rank
