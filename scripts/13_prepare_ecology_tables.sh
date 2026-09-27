@@ -27,6 +27,9 @@ python3 scripts/08_build_master_annotation.py   --table "$OTU_TABLE"   --gtdb "$
 FILTERED_TABLE="$PREP/otu-table-99-prokaryotes.tsv"
 MASTER="$PREP/master_taxonomy.tsv"
 
+echo "=== Summarize taxonomy QC ==="
+python3 scripts/11_taxonomy_qc.py   --annotation "$MASTER"   --out "$QC/taxonomy_qc.tsv"
+
 echo "=== Harmonize metadata ==="
 python3 scripts/09_harmonize_metadata.py   --metadata "$METADATA_XLSX"   --table "$FILTERED_TABLE"   --outdir "$PREP"
 
