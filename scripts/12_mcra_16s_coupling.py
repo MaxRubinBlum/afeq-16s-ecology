@@ -9,11 +9,13 @@ from scipy.stats import spearmanr
 
 
 def load_feature_table(path):
-    df = pd.read_csv(path, sep="\t", comment="#")
-    if df.columns[0] != "#OTU ID":
-        # BIOM TSV exports can contain a comment line before the header.
-        raw = pd.read_csv(path, sep="\t", skiprows=1)
-        df = raw
+    # VSEARCH tables start directly with "#OTU ID". BIOM TSV exports often
+    # contain one preceding "# Constructed from biom file" comment line.
+    with open(path, "r", encoding="utf-8") as handle:
+        first = handle.readline()
+
+    skiprows = 1 if first.startswith("# Constructed") else 0
+    df = pd.read_csv(path, sep="\t", skiprows=skiprows)
     df = df.rename(columns={df.columns[0]: "FeatureID"})
     return df
 
