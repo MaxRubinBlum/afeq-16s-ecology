@@ -1,0 +1,14 @@
+metric	value	note
+raw_libraries	188	62 run 2860 + 126 genuine run 3408 libraries
+raw_reads	25395564	all retained source FASTQs
+primer_quality_length_filtered_reads	20117175	79.22% of raw reads
+direct_otu99_nonchimeric	26300	primary direct workflow
+final_otu99_mapped_reads	12355927	reads assigned to final non-chimeric 99% OTUs
+gtdb_taxonomy_ids	26300	exact one-to-one match with final OTU IDs
+silva_taxonomy_ids	26300	exact one-to-one match with final OTU IDs
+chloroplast_OTUs	112	identified with SILVA
+mitochondrial_OTUs	111	identified with SILVA
+working_filtered_OTUs	26054	chloroplast/mitochondria/Eukaryota/GTDB-unassigned removed
+working_filtered_reads	12209120	bacterial-dominated ecology table
+metadata_matched_EA_samples	106	corrected depth/geochemistry metadata
+shared_16S_mcra_samples	96	exact IDs used in first cross-marker analysis
