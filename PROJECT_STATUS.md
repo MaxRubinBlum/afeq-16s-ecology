@@ -35,15 +35,25 @@ Complete:
 
 The DADA2 table is retained as a stringent sensitivity dataset.
 
-## Current downstream stage
+## Downstream analysis status
+
+Completed first-pass analyses:
+
+- master GTDB + SILVA annotation
+- chloroplast / mitochondria / Eukaryota / GTDB-unassigned filtering
+- metadata harmonization
+- Jan resequencing QC
+- GTDB family/genus profiles
+- repeated-rarefaction alpha diversity
+- Bray-Curtis / PCoA
+- site and month community-structure tests
+- site-stratified depth and geochemical associations
+- 16S–mcrA community-distance coupling
+- depth/site/month-adjusted 16S taxon–mcrA lineage coupling
 
 In progress:
 
-- master dual-taxonomy annotation
-- organelle-filtered count table
-- metadata harmonization
-- resequencing QC
-- taxonomic profiles
-- alpha/beta diversity
-- geochemical/environmental associations
+- selection of publication-level taxa/associations
+- visualization of depth and geochemical gradients
+- integrated 16S–mcrA figures
 - GTDB-rank comparison with MAGs
