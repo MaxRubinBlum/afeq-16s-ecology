@@ -1,5 +1,21 @@
 # Project status
 
+## Repository organization
+
+The 16S repository is now organized in the same teaching-oriented style as the Afeq mcrA repository:
+
+- numbered documentation chapters from project setup through ecology;
+- numbered processing/QC scripts;
+- ecology steps 13-20;
+- one ecology runner;
+- configuration template;
+- metadata template;
+- small reproducible QC summary;
+- troubleshooting and GitHub workflow guides;
+- tests.
+
+The intended user is a student learning both the biological reasoning and the mechanics of the analysis.
+
 ## Primary sequence processing
 
 Validated and complete:
@@ -43,13 +59,13 @@ Completed first-pass analyses:
 - chloroplast / mitochondria / Eukaryota / GTDB-unassigned filtering
 - metadata harmonization
 - Jan resequencing QC
-- GTDB family/genus profiles
+- GTDB phylum/family/genus profiles
 - repeated-rarefaction alpha diversity
 - Bray-Curtis / PCoA
 - site and month community-structure tests
 - site-stratified depth and geochemical associations
-- 16S–mcrA community-distance coupling
-- depth/site/month-adjusted 16S taxon–mcrA lineage coupling
+- 16S-mcrA community-distance coupling
+- depth/site/month-adjusted 16S taxon-mcrA lineage coupling
 
 Current interpretation:
 
@@ -59,8 +75,8 @@ Current interpretation:
 
 In progress:
 
-- selection of publication-level taxa/associations
-- visualization of depth and geochemical gradients
-- integrated 16S–mcrA figures
+- publication-level visualization of depth and geochemical gradients
+- integrated 16S-mcrA figures
+- refinement of publication-level taxon/association selection
 - MAG reconstruction/analysis
 - later GTDB-rank integration with MAGs
