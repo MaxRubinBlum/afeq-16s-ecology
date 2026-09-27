@@ -26,6 +26,16 @@ def read_taxonomy(path, prefix):
     return df
 
 
+def gtdb_domain(taxon):
+    if pd.isna(taxon):
+        return ""
+    for token in str(taxon).split(";"):
+        token = token.strip()
+        if token.startswith("d__"):
+            return token[3:].strip()
+    return ""
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--table", required=True, help="VSEARCH otu-table-99.tsv")
@@ -68,11 +78,27 @@ def main():
     ann["is_mitochondria"] = silva_text.str.contains(
         "Mitochondria", case=False, regex=False
     )
-    ann["is_organelle"] = ann["is_chloroplast"] | ann["is_mitochondria"]
+    ann["is_eukaryota"] = silva_text.str.contains(
+        "d__Eukaryota", case=False, regex=False
+    )
+
+    ann["GTDB_domain"] = ann["GTDB_taxonomy"].map(gtdb_domain)
+    ann["is_gtdb_unassigned_domain"] = ~ann["GTDB_domain"].isin(
+        ["Bacteria", "Archaea"]
+    )
+
+    ann["exclude_from_prokaryotic_ecology"] = (
+        ann["is_chloroplast"]
+        | ann["is_mitochondria"]
+        | ann["is_eukaryota"]
+        | ann["is_gtdb_unassigned_domain"]
+    )
 
     ann.to_csv(outdir / "master_taxonomy.tsv", sep="\t", index=False)
 
-    keep_ids = set(ann.loc[~ann["is_organelle"], "OTU_ID"])
+    keep_ids = set(
+        ann.loc[~ann["exclude_from_prokaryotic_ecology"], "OTU_ID"]
+    )
     prok = table.loc[table["OTU_ID"].isin(keep_ids)].copy()
     prok.to_csv(outdir / "otu-table-99-prokaryotes.tsv", sep="\t", index=False)
 
@@ -80,25 +106,35 @@ def main():
     total_reads = table[sample_cols].to_numpy().sum()
     prok_reads = prok[sample_cols].to_numpy().sum()
 
-    chlor_ids = set(ann.loc[ann["is_chloroplast"], "OTU_ID"])
-    mito_ids = set(ann.loc[ann["is_mitochondria"], "OTU_ID"])
-    chlor_reads = table.loc[
-        table["OTU_ID"].isin(chlor_ids), sample_cols
-    ].to_numpy().sum()
-    mito_reads = table.loc[
-        table["OTU_ID"].isin(mito_ids), sample_cols
-    ].to_numpy().sum()
+    def reads_for_flag(flag):
+        ids = set(ann.loc[ann[flag], "OTU_ID"])
+        return table.loc[
+            table["OTU_ID"].isin(ids), sample_cols
+        ].to_numpy().sum()
 
     summary = pd.DataFrame(
         [
             ("OTUs_total", len(table)),
             ("OTUs_chloroplast", int(ann["is_chloroplast"].sum())),
             ("OTUs_mitochondria", int(ann["is_mitochondria"].sum())),
-            ("OTUs_organelle_union", int(ann["is_organelle"].sum())),
+            ("OTUs_eukaryota", int(ann["is_eukaryota"].sum())),
+            (
+                "OTUs_GTDB_unassigned_domain",
+                int(ann["is_gtdb_unassigned_domain"].sum()),
+            ),
+            (
+                "OTUs_excluded_union",
+                int(ann["exclude_from_prokaryotic_ecology"].sum()),
+            ),
             ("OTUs_prokaryotic_working", len(prok)),
             ("reads_total", int(total_reads)),
-            ("reads_chloroplast", int(chlor_reads)),
-            ("reads_mitochondria", int(mito_reads)),
+            ("reads_chloroplast", int(reads_for_flag("is_chloroplast"))),
+            ("reads_mitochondria", int(reads_for_flag("is_mitochondria"))),
+            ("reads_eukaryota", int(reads_for_flag("is_eukaryota"))),
+            (
+                "reads_GTDB_unassigned_domain",
+                int(reads_for_flag("is_gtdb_unassigned_domain")),
+            ),
             ("reads_prokaryotic_working", int(prok_reads)),
             ("samples", len(sample_cols)),
         ],
