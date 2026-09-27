@@ -51,9 +51,16 @@ Completed first-pass analyses:
 - 16S–mcrA community-distance coupling
 - depth/site/month-adjusted 16S taxon–mcrA lineage coupling
 
+Current interpretation:
+
+- 16S is treated as a bacterial-dominated community marker because the 27F-like primer strongly underrepresents Archaea.
+- mcrA provides the targeted methane-cycling archaeal layer.
+- MAGs are still in progress and are not part of the current integrated interpretation.
+
 In progress:
 
 - selection of publication-level taxa/associations
 - visualization of depth and geochemical gradients
 - integrated 16S–mcrA figures
-- GTDB-rank comparison with MAGs
+- MAG reconstruction/analysis
+- later GTDB-rank integration with MAGs
