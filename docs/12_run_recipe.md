@@ -19,7 +19,7 @@ conda activate qiime2-amplicon-2026.1
 ## 3. Generate manifests
 
 ~~~bash
-python3 scripts/00_make_manifests.py   --run2860-dir "$RUN2860_DIR"   --run3408-dir "$RUN3408_DIR"   --outdir "$ANALYSIS_DIR/manifests"
+python3 scripts/01_make_manifests.py   --run2860-dir "$RUN2860_DIR"   --run3408-dir "$RUN3408_DIR"   --outdir "$ANALYSIS_DIR/manifests"
 ~~~
 
 Expected:
@@ -32,8 +32,8 @@ run 3408 = 126 samples
 ## 4. Primary direct processing
 
 ~~~bash
-bash scripts/01_trim_filter.sh
-bash scripts/02_build_otu99.sh
+bash scripts/02_trim_filter.sh
+bash scripts/03_build_otu99.sh
 ~~~
 
 Expected checkpoints:
@@ -47,7 +47,7 @@ mapped reads   = 12,355,927
 ## 5. Optional DADA2 sensitivity branch
 
 ~~~bash
-bash scripts/03_qiime_dada2_comparison.sh
+bash scripts/04_qiime_dada2_comparison.sh
 ~~~
 
 Do not substitute this table for the direct OTU table without revisiting the read-retention decision.
@@ -57,13 +57,13 @@ Do not substitute this table for the direct OTU table without revisiting the rea
 Train once if needed:
 
 ~~~bash
-bash scripts/04_train_gtdb_classifier.sh
+bash scripts/05_train_gtdb_classifier.sh
 ~~~
 
 Classify:
 
 ~~~bash
-bash scripts/05_classify_gtdb.sh
+bash scripts/06_classify_gtdb.sh
 ~~~
 
 ## 7. SILVA classifier
@@ -71,7 +71,7 @@ bash scripts/05_classify_gtdb.sh
 Set SILVA_CLASSIFIER in config/config.sh, then:
 
 ~~~bash
-bash scripts/05b_classify_silva.sh
+bash scripts/07_classify_silva.sh
 ~~~
 
 ## 8. Validate final IDs
