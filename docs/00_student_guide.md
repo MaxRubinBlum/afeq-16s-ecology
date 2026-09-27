@@ -51,7 +51,7 @@ If any of these are unclear, resolve them before starting a long analysis.
 
 ### Step 1 - identify samples
 
-The two sequencing deliveries use different filename formats. scripts/00_make_manifests.py converts them into canonical IDs and manifests.
+The two sequencing deliveries use different filename formats. scripts/01_make_manifests.py converts them into canonical IDs and manifests.
 
 The second raw-data directory also contains copied 2860 files. The script deliberately selects only the real 3408-prefixed FASTQs.
 
